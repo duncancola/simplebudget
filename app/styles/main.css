@@ -1,1 +1,18 @@
 /* Will be compiled down to a single stylesheet with your sass files */
+
+/*
+ * darkGreen: #5F7E64
+ * lightGreen: #99BD96
+ * beige: #DCBD96
+ * peach: #FEA26E
+ * salmon: #FE615B
+ */
+
+body {
+	background: url("../images/shl/shl.png");
+	background-repeat: repeat;
+}
+
+#barChart {
+	height: 200px;
+}
