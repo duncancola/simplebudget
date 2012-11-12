@@ -8,6 +8,7 @@ define([], function () {
 		var parentElem = document.getElementById(settings.parent);
 		this.settings = $.extend({}, settings, options);
 		this.type = type;
+		this.startData = data;
 		this.data = data;
 		this.width = $(parentElem).width();
 		this.height = (this.settings.height && this.settings.height > 0) ?
@@ -45,11 +46,11 @@ define([], function () {
 	
 	chart.prototype.updateData = function (num) {
 		var scale = 1 + (num/100);
+		console.log(scale);
 		var thisChart = this;
-		this.data = _.map(this.data, function (d) {
+		this.data = _.map(this.startData, function (d) {
 			return scale * d;
 		});
-		console.log(this.data[5]);
 		this.svg.selectAll("rect")
 			.data(this.data)
 			.attr({
