@@ -1,8 +1,8 @@
 {
-  "author": "",
-  "name": "",
+  "author": "Duncan Grant",
+  "name": "simplebudget",
   "colors": "https://kuler.adobe.com/#themeID/2126562"
-  "version": "0.0.0",
+  "version": "0.0.1",
   "dependencies": {},
   "devDependencies": {}
 }
