@@ -16,3 +16,11 @@ body {
 #barChart {
 	height: 200px;
 }
+
+.income {
+	color: #5F7E64;
+}
+
+.expense {
+	color: #FE615B;
+}

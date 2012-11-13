@@ -4,7 +4,7 @@ define([], function () {
 		parent: "charts"
 	};
 	
-	var chart = function (type, data, options) {
+	var Chart = function (type, data, options) {
 		var parentElem = document.getElementById(settings.parent);
 		this.settings = $.extend({}, settings, options);
 		this.type = type;
@@ -23,7 +23,7 @@ define([], function () {
 			});
 	};
 	
-	chart.prototype.render = function () {
+	Chart.prototype.render = function () {
 		var thisChart = this;
 		this.svg.selectAll("rect")
 			.data(this.data)
@@ -44,8 +44,8 @@ define([], function () {
 			});
 	};
 	
-	chart.prototype.updateData = function (num) {
-		var scale = 1 + (num/100);
+	Chart.prototype.updateData = function (num) {
+		var scale = 1 + (num/100)*2;
 		console.log(scale);
 		var thisChart = this;
 		this.data = _.map(this.startData, function (d) {
@@ -63,6 +63,6 @@ define([], function () {
 			});
 	};
 	
-	return chart;
+	return Chart;
 	
 });

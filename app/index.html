@@ -25,11 +25,45 @@
 			</div>
 			<div class="span4">
 				<h1>Data</h1>
-				<label for="income">Income</label>
-				<input id="income" name="income" type="range" min="0" max="100">
+				<form id="budgetForm" class="form-horizontal">
+					<fieldset>
+						<div class="well">
+							<h2>Income: <span id="incomeTotal" class="income">£0</span></h2>
+							<div id="incomeContainer">
+							
+							</div>
+							<div class="row-fluid">
+								<div class="span12">
+									<button type="button" id="addIncome" class="btn span12">Add income</button>
+								</div>
+							</div>
+						</div>
+						<div class="well">
+							<h2>Expenses: <span id="expensesTotal" class="expense">£0</span></h2>
+							<div id="expensesContainer">
+							
+							</div>
+							<div class="row-fluid">
+								<div class="span12">
+									<button type="button" id="addExpense" class="btn span12">Add expense</button>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
 			</div>
         </div>
     </div>
+    
+<script type="text/template" id="controlTemplate">
+<div class="control-group" id="{{id}}">
+	<label for="{{name}}" class="control-label">{{name}}</label>
+	<div class="controls">
+		<input name="{{name}}" type="input">
+		<input name="{{name}}Range" type="range" min="0" max="100">
+	</div>
+</div>
+</script>
 
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
@@ -40,16 +74,19 @@
         <script src="scripts/vendor/jquery.min.js"></script>
         <script src="scripts/vendor/lodash.js"></script>
         <script src="scripts/vendor/d3.v2.js"></script>
+        <script src="scripts/vendor/mustache.js"></script>
         
         
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <!-- Uncome when this is sorted!!
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
+        -->
     
     <!-- build:js scripts/amd-app.js -->
     <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
