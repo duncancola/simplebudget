@@ -2,11 +2,6 @@ define(["chart", "budget"], function(Chart, Budget) {
 	
 	var settings = {
 		incomeSlider: "incomeTotal",
-		incomeContainer: "incomeContainer",
-		expensesContainer: "expensesContainer",
-		templates: {
-			controls: "controlTemplate"
-		},
 		btns: {
 			addIncome: "addIncome",
 			addExpense: "addExpense"
@@ -15,28 +10,21 @@ define(["chart", "budget"], function(Chart, Budget) {
 	
 	var app = {};
 	
-	var setEvents = function (c) {
+	var setEvents = function (chart, budget) {
 		$(document.getElementById(settings.incomeSlider)).change(function () {
-			c.updateData.call(c, parseInt($(this).val(), 10) - 50);
+			chart.updateData.call(chart, parseInt($(this).val(), 10) - 50);
 		});
 		
 		$(document.getElementById(settings.btns.addIncome)).click(function (e) {
 			e.preventDefault();
-			var template = Mustache.render($(document.getElementById(settings.templates.controls)).html(), {
-				"id": _.uniqueId("income_"),
-				"name": "New Income"
-			});
-			console.log(template);
-			$(document.getElementById(settings.incomeContainer)).append(template);
+			var income = new budget.Income();
+			income.renderFromTemplate();
 		});
 		
 		$(document.getElementById(settings.btns.addExpense)).click(function (e) {
 			e.preventDefault();
-			var template = Mustache.render($(document.getElementById(settings.templates.controls)).html(), {
-				"id": _.uniqueId("expense"),
-				"name": "New Expense"
-			});
-			$(document.getElementById(settings.expensesContainer)).append(template);
+			var expense = new budget.Expense();
+			expense.renderFromTemplate();
 		});
 	};
 	
@@ -44,13 +32,12 @@ define(["chart", "budget"], function(Chart, Budget) {
 		console.log("Simple budget app initialised.");
 		var bar = new Chart("bar", d3.range(10,100,10));
 		bar.render();
-		setEvents(bar);
 		
 		// budget test
-		var b = new Budget();
-		var expense = new b.addExpense();
-		var income = new b.addIncome();
-		console.log(income.val, expense.val);
+		var budget = new Budget();
+		
+		setEvents(bar, budget);
+		
 	};
 	
 	return app;
