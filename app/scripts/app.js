@@ -94,13 +94,13 @@ define(["chart", "budget"], function(Chart, Budget) {
 	
 	app.init = function () {
 		console.log("Simple budget app initialised.");
-		var mockData = _.map(d3.range(10, 100, 10), function (val) {
+		/*var mockData = _.map(d3.range(10, 100, 10), function (val) {
 			return {
 				id: _.uniqueId(),
 				val: val
 			};
-		});
-		var bar = new Chart("bar", mockData);
+		});*/
+		var bar = new Chart("bar");
 		bar.render();
 		// budget test
 		var budget = new Budget();

@@ -24,13 +24,10 @@ define([], function () {
 		this.bars = this.svg.selectAll("g.bar");
 	};
 	
-	Chart.prototype.render = function () {
-		console.log(this.data.length);
+	var updateExistingElems = function () {
 		var thisChart = this;
 		this.svg.selectAll("rect")
-			.data(this.data)
-			.enter()
-			.append("rect")
+			.data(this.data, function (d) {return d.id;})
 			.attr({
 				x: function (d, i) {
 					return (i * ((thisChart.width/thisChart.data.length) + thisChart.padding));
@@ -46,6 +43,32 @@ define([], function () {
 			});
 	};
 	
+	var makeBarAttr = function (chart) {
+		return {
+				x: function (d, i) {
+					return (i * ((chart.width/chart.data.length) + chart.padding));
+				},
+				y: function (d) {
+					return (chart.height - d.val);
+				},
+				width: (chart.width/chart.data.length)-chart.padding,
+				height: function (d) {
+					return (chart.height - d.val);
+				},
+				fill: "blue"
+			};
+	};
+	
+	Chart.prototype.render = function () {
+		updateExistingElems.call(this);
+		var thisChart = this;
+		this.svg.selectAll("rect")
+			.data(this.data, function (d) {return d.id;})
+			.enter()
+			.append("rect")
+			.attr(makeBarAttr(thisChart));
+	};
+	
 	Chart.prototype.addData = function () {
 		var dataArray = Array.prototype.slice.apply(arguments);
 		this.data = this.data.concat(dataArray);
@@ -56,6 +79,7 @@ define([], function () {
 			return item.id === id;
 		});
 		elem.val = val;
+		console.log(_.pluck(this.data, "val"));
 	};
 	
 	/*Chart.prototype.updateData = function (num) {
