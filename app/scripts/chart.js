@@ -28,19 +28,7 @@ define([], function () {
 		var thisChart = this;
 		this.svg.selectAll("rect")
 			.data(this.data, function (d) {return d.id;})
-			.attr({
-				x: function (d, i) {
-					return (i * ((thisChart.width/thisChart.data.length) + thisChart.padding));
-				},
-				y: function (d) {
-					return (thisChart.height - d.val);
-				},
-				width: (thisChart.width/thisChart.data.length)-thisChart.padding,
-				height: function (d) {
-					return (thisChart.height - d.val);
-				},
-				fill: "blue"
-			});
+			.attr(makeBarAttr(thisChart));
 	};
 	
 	var makeBarAttr = function (chart) {
@@ -79,27 +67,7 @@ define([], function () {
 			return item.id === id;
 		});
 		elem.val = val;
-		console.log(_.pluck(this.data, "val"));
 	};
-	
-	/*Chart.prototype.updateData = function (num) {
-		var scale = 1 + (num/100)*2;
-		console.log(scale);
-		var thisChart = this;
-		this.data = _.map(this.startData, function (d) {
-			return scale * d.val;
-		});
-		this.svg.selectAll("rect")
-			.data(this.data)
-			.attr({
-				y: function (d) {
-					return (thisChart.height - d.val);
-				},
-				height: function (d) {
-					return d.val;
-				}
-			});
-	};*/
 	
 	return Chart;
 	
