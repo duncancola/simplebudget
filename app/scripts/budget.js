@@ -31,6 +31,10 @@ define([], function () {
 		this.$container.append(renderedHtml);
 	};
 	
+	FinancialItem.prototype.getAsChartData = function () {
+		return _.pick(this, "id", "val");
+	};
+	
 	function Expense () {
 		// super inheritance
 		FinancialItem.call(this);
@@ -69,6 +73,19 @@ define([], function () {
 			if (income instanceof Income) {
 				this.income.push(income);
 			}
+		},
+		getData: function (type) {
+			var data = [];
+			if (type === "expenses") {
+				data = this.expenses;
+			} else if (type === "income") {
+				data = this.income;
+			} else {
+				data = this.expenses.concat(this.income);
+			}
+			return _.map(data, function (item) {
+				return item.getAsChartData();
+			});
 		}
 	};
 	

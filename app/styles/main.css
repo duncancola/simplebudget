@@ -17,6 +17,18 @@ body {
 	height: 200px;
 }
 
+.editLabel {
+	float: left;
+	width: 140px;
+	padding-top: 5px;
+	text-align: right;
+	display: block;
+	margin-bottom: 5px;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 20px;
+}
+
 .income {
 	color: #5F7E64;
 }
