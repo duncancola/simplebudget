@@ -18,7 +18,7 @@ define(["chart", "budget"], function(Chart, Budget) {
 		// add new blank income field
 		$(document.getElementById(settings.btns.addIncome)).click(function (e) {
 			e.preventDefault();
-			var income = new budget.Income();
+			var income = budget.Income();
 			chart.addData(income.getAsChartData());
 			income.renderFromTemplate();
 		});
@@ -26,7 +26,7 @@ define(["chart", "budget"], function(Chart, Budget) {
 		// add new blank expense field
 		$(document.getElementById(settings.btns.addExpense)).click(function (e) {
 			e.preventDefault();
-			var expense = new budget.Expense();
+			var expense = budget.Expense();
 			expense.renderFromTemplate();
 		});
 		
@@ -34,10 +34,16 @@ define(["chart", "budget"], function(Chart, Budget) {
 		$(document.getElementById(settings.budgetForm)).on("click", "label", function (e) {
 			e.preventDefault();
 			var labelText = $(this).text();
+			var id = $(this).parent().attr("id");
 			var $input = $("<input>")
 					.attr("type", "text")
-					.addClass("editLabel")
-					.val(labelText);
+					.addClass("editLabel");
+			var budgetItem = budget.getItem(id);
+			if (budgetItem && !budgetItem.nameUpdated) {
+				$input.val("");
+			} else {
+				$input.val(labelText);
+			}
 			$(this).replaceWith(
 				$input
 			);
@@ -47,12 +53,15 @@ define(["chart", "budget"], function(Chart, Budget) {
 		// change text box back to label
 		$(document.getElementById(settings.budgetForm)).on("blur", ".editLabel", function (e) {
 			e.preventDefault();
-			var val = $(this).val();
+			var val = $(this).val() || budget.getDefaultName();
 			var inputFor = $(this).next().find("input[type=text]").attr("name");
 			var $label = $("<label>")
 					.attr("for", inputFor)
 					.addClass("control-label")
 					.html(val);
+			// update budget item
+			var id = $(this).parent().attr("id");
+			budget.updateItem(id, {"name": val});
 			$(this).replaceWith(
 				$label
 			);
@@ -72,7 +81,7 @@ define(["chart", "budget"], function(Chart, Budget) {
 			}
 		});
 		
-		// input change - update data point in chart
+		// input change - update data point in chart and update FinancialItem
 		$(document.getElementById(settings.budgetForm)).on("change", ".financialItemValue", function () {
 			var val = parseInt($(this).val(), 10);
 			var id = $(this).parent().parent().attr("id");
@@ -80,6 +89,7 @@ define(["chart", "budget"], function(Chart, Budget) {
 				// TODO: find the data point in chart by ID and update the data value
 				chart.updateDataById(id, val);
 				chart.render();
+				budget.updateItem(id, {"val": val});
 			} else {
 				console.log("Error: value must be an integer!");
 			}
@@ -104,7 +114,6 @@ define(["chart", "budget"], function(Chart, Budget) {
 		bar.render();
 		// budget test
 		var budget = new Budget();
-		
 		setEvents(bar, budget);
 		
 	};

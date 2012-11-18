@@ -32,19 +32,30 @@ define([], function () {
 	};
 	
 	var makeBarAttr = function (chart) {
+		// scale chart
+		var point = (chart.height/chart.getMax());
 		return {
-				x: function (d, i) {
-					return (i * ((chart.width/chart.data.length) + chart.padding));
-				},
-				y: function (d) {
-					return (chart.height - d.val);
-				},
-				width: (chart.width/chart.data.length)-chart.padding,
-				height: function (d) {
-					return (chart.height - d.val);
-				},
-				fill: "blue"
-			};
+			x: function (d, i) {
+				return (i * ((chart.width/chart.data.length) + chart.padding));
+			},
+			y: function (d) {
+				return chart.height - (d.val * point);
+			},
+			width: (chart.width/chart.data.length)-chart.padding,
+			height: function (d) {
+				return (d.val * point);
+			},
+			fill: "blue"
+		};
+	};
+	
+	Chart.prototype.getMax = function () {
+		if (this.data.length === 0) return 1;
+		var max = _.max(this.data, function (d) {
+			return d.val;
+		}).val;
+		max = (isNaN(max) || max < 1 || max === Infinity) ? 1 : max;
+		return max;
 	};
 	
 	Chart.prototype.render = function () {
@@ -60,6 +71,7 @@ define([], function () {
 	Chart.prototype.addData = function () {
 		var dataArray = Array.prototype.slice.apply(arguments);
 		this.data = this.data.concat(dataArray);
+		this.render();
 	};
 	
 	Chart.prototype.updateDataById = function (id, val) {

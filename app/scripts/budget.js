@@ -8,16 +8,18 @@ define([], function () {
 	var settings = {
 		itemTemplate: "controlTemplate",
 		incomeContainer: "incomeContainer",
-		expensesContainer: "expensesContainer"
+		expensesContainer: "expensesContainer",
+		defaultName: "New Item"
 	};
 	 
 	function FinancialItem () {
 		this.val = 0;
 		this.type = "financialItem";
-		this.name = "New Item";
+		this.name = settings.defaultName;
 		this.id = _.uniqueId(this.type);
 		this.$container = $(".container");
 		this.templateHtml = $(document.getElementById(settings.itemTemplate)).html();
+		this.nameUpdated = false
 	}
 	
 	/**
@@ -57,13 +59,20 @@ define([], function () {
 		// array of expense objects (easy to sort array by different facets
 		// e.g. get all expenses after a date or over a certain cost, analytics ;)
 		settings = _.extend(settings, options);
-		this.expenses = [];
-		this.income = [];
+		this.financialItems = [];
 	}
 	
 	Budget.prototype = {
-		Expense: Expense,
-		Income: Income,
+		Expense: function () {
+			var expense = new Expense();
+			this.financialItems.push(expense);
+			return expense;
+		},
+		Income: function () {
+			var income = new Income();
+			this.financialItems.push(income);
+			return income;
+		},
 		addExpense: function (expense) {
 			if (expense instanceof Expense) {
 				this.expenses.push(expense);
@@ -73,6 +82,11 @@ define([], function () {
 			if (income instanceof Income) {
 				this.income.push(income);
 			}
+		},
+		getItem: function (id) {
+			return _.find(this.financialItems, function (item) {
+				return (item.id === id);
+			});
 		},
 		getData: function (type) {
 			var data = [];
@@ -86,6 +100,16 @@ define([], function () {
 			return _.map(data, function (item) {
 				return item.getAsChartData();
 			});
+		},
+		updateItem: function (id, options) {
+			var item = this.getItem(id);
+			item = _.extend(item, options);
+			if (options.name) {
+				item.nameUpdated = true;
+			}
+		},
+		getDefaultName: function () {
+			return settings.defaultName;
 		}
 	};
 	
