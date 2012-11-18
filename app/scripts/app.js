@@ -39,7 +39,7 @@ define(["chart", "budget"], function(Chart, Budget) {
 					.attr("type", "text")
 					.addClass("editLabel");
 			var budgetItem = budget.getItem(id);
-			if (budgetItem && !budgetItem.nameUpdated) {
+			if (budgetItem && (!budgetItem.nameUpdated || budgetItem.name === budget.getDefaultName())) {
 				$input.val("");
 			} else {
 				$input.val(labelText);

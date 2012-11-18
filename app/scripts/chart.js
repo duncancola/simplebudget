@@ -28,7 +28,10 @@ define([], function () {
 		var thisChart = this;
 		this.svg.selectAll("rect")
 			.data(this.data, function (d) {return d.id;})
-			.attr(makeBarAttr(thisChart));
+			.transition()
+			.attr(makeBarAttr(thisChart))
+			.ease("poly(3)")
+			.duration(600);
 	};
 	
 	var makeBarAttr = function (chart) {
