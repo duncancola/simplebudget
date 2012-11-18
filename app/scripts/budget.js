@@ -9,6 +9,8 @@ define([], function () {
 		itemTemplate: "controlTemplate",
 		incomeContainer: "incomeContainer",
 		expensesContainer: "expensesContainer",
+		incomeTotal: "incomeTotal",
+		expensesTotal: "expensesTotal",
 		defaultName: "New Item"
 	};
 	 
@@ -62,6 +64,17 @@ define([], function () {
 		this.financialItems = [];
 	}
 	
+	var getTotal = function (arr, type) {
+		return _.chain(arr)
+			.filter(function (item) {
+				return (item.type === type);
+			})
+			.reduce(function (memo, item) {
+				return (item.val + memo);
+			}, 0)
+			.value();
+	};
+	
 	Budget.prototype = {
 		Expense: function () {
 			var expense = new Expense();
@@ -107,6 +120,15 @@ define([], function () {
 			if (options.name) {
 				item.nameUpdated = true;
 			}
+			if (options.val) {
+				this.updateTotals();
+			}
+		},
+		updateTotals: function () {
+			var incomeTotal = getTotal(this.financialItems, "income");
+			var expensesTotal = getTotal(this.financialItems, "expense");
+			$(document.getElementById(settings.incomeTotal)).html(incomeTotal);
+			$(document.getElementById(settings.expensesTotal)).html(expensesTotal);
 		},
 		getDefaultName: function () {
 			return settings.defaultName;
